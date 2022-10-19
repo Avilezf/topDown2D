@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerShooting : MonoBehaviour
+public class TowerShooting : MonoBehaviour
 {
-    public static PlayerShooting Instance;
+
+    public static TowerShooting Instance;
     public Transform firePoint;
     public Bullet bulletPrefab;
     public float bulletForce = 20f;
@@ -22,12 +23,7 @@ public class PlayerShooting : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "PowerSource")
-        {
-            startShotting = true;
-            lookAtTarget();
-        }
-        else if (collision.gameObject.tag == "Tower")
+        if (collision.gameObject.tag == "Player")
         {
             startShotting = true;
             lookAtTarget();

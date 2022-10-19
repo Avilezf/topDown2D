@@ -14,12 +14,18 @@ public class Player : MonoBehaviour
     private Grid grid;
     private bool changedCells = false;
     private Rigidbody2D rb;
+    public int HP;
+    public int Cost;
+
+    private float closestDistance;
 
     // Index of current waypoint from which Enemy walks
     // to the next one
     private int waypointIndex = 0;
 
-    
+    private List<GameObject> playersDestroy = new List<GameObject>();
+
+
 
     void FixedUpdate()
     {
@@ -28,11 +34,18 @@ public class Player : MonoBehaviour
     }
 
 
-
     public void starMoving(Grid grid, float speed)
     {
-        
+
         this.grid = grid;
+        calculatePath();
+        startMoving = true;
+        moveSpeed = speed;
+    }
+
+    public void starMoving(float speed)
+    {
+
         calculatePath();
         startMoving = true;
         moveSpeed = speed;
@@ -56,6 +69,28 @@ public class Player : MonoBehaviour
             Debug.Log("Made it");
             path = null;
         }
+
+        if (collision.gameObject.tag == "EBullet")
+        {
+
+            HP -= 20;
+            //Debug.Log("Hit by a bullet, new HP "+ HP);
+            Destroy(collision.gameObject);
+            if (HP < 0)
+            {
+                playersDestroy.Add(this.gameObject);
+                if (playersDestroy.Count >= GameObject.FindGameObjectsWithTag("Player").GetLength(0))
+                {
+                    GameManager.Instance.UpdateGameState(GameManager.GameStateEnum.end);
+                }
+                else
+                {
+                    PathManager.Instance.powerUnitLocation = new Vector2Int((int)findClosestEnemy().transform.position.x, (int)findClosestEnemy().transform.position.y);
+                    BoardManager.Instance.player.starMoving(3);
+                }
+                Destroy(this.gameObject);
+            }
+        }
     }
 
     private void Move()
@@ -70,22 +105,24 @@ public class Player : MonoBehaviour
             //Debug.Log("Moving to " + path[waypointIndex].transform.position.x.ToString() + " "
             //    + path[waypointIndex].transform.position.y.ToString());
 
-            if (changedCells) {
+            if (changedCells)
+            {
                 changedCells = false;
                 if (!grid.isWalkable((int)path[waypointIndex].transform.position.x, (int)path[waypointIndex].transform.position.y))
                 {
                     //Debug.Log("not walkable");
-                    //path = null;
+                    path = null;
                     calculatePath();
                     return;
-                } else
+                }
+                else
                 {
                     grid.setBusyCell((int)path[waypointIndex - 1].transform.position.x,
                         (int)path[waypointIndex - 1].transform.position.y,
                         (int)path[waypointIndex].transform.position.x,
                         (int)path[waypointIndex].transform.position.y);
                 }
-                
+
             }
             // Move player from current waypoint to the next one
             // using MoveTowards method
@@ -103,4 +140,42 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+    private GameObject findClosestEnemy()
+    {
+        GameObject[] objs;
+
+        if (gameObject.tag == "Tower")
+        {
+            objs = GameObject.FindGameObjectsWithTag("Player");
+        }
+        else
+        {
+            objs = GameObject.FindGameObjectsWithTag("Tower");
+        }
+
+
+        GameObject closestEnemy = null;
+
+        bool first = true;
+
+        foreach (var obj in objs)
+        {
+            float distance = Vector3.Distance(obj.transform.position, transform.position);
+            if (first)
+            {
+                closestDistance = distance;
+                closestEnemy = obj;
+                first = false;
+            }
+            else if (distance < closestDistance)
+            {
+                closestEnemy = obj;
+                closestDistance = distance;
+            }
+
+        }
+        return closestEnemy;
+    }
+
 }

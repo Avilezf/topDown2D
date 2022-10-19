@@ -12,12 +12,12 @@ public class PowerSource : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Hit");
+        //Debug.Log("Hit");
         if (collision.gameObject.tag == "Bullet")
         {
             
             HP -= 20;
-            Debug.Log("Hit by a bullet, new HP "+ HP);
+            //Debug.Log("Hit by a bullet, new HP "+ HP);
             Destroy(collision.gameObject);
             if (HP < 0)
             {

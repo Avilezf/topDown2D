@@ -150,6 +150,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.075069, y: 1.5988721, z: -13.97435}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -246,6 +247,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 6, y: 6, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -281,8 +283,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CellPrefab: {fileID: -5152743832843653546, guid: dec724f01987447449af4c24ce757670, type: 3}
   PlayerPrefab: {fileID: 4587635388746303466, guid: e8d4002ea143343439f26e985cee9581, type: 3}
+  Player2Prefab: {fileID: 4587635388746303466, guid: d6d4ed695a39e4b40b5ea088f3d582a2, type: 3}
+  Player3Prefab: {fileID: 4587635388746303466, guid: 2319571d874d4834489ae3ab731b0b16, type: 3}
   PowerSourcePrefab: {fileID: 2219081163613578378, guid: 152930bb97dca45e9be6ef08cdaea323, type: 3}
-  moveSpeed: 2
+  TowerPrefab: {fileID: -4670028698256844425, guid: 416d2f6fd4fcdcb469d59de7bcd4de27, type: 3}
+  Tower2Prefab: {fileID: -4670028698256844425, guid: 3ff49f71c2086be4f8e2762ee08275a1, type: 3}
+  player: {fileID: 0}
+  closestDistance: 1
+  budgetPlayer: 1000
+  budgetTowers: 500
 --- !u!4 &681147168
 Transform:
   m_ObjectHideFlags: 0
@@ -293,6 +302,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -339,6 +349,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -382,6 +393,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4

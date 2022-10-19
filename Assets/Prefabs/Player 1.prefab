@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4587635388746303466}
   - component: {fileID: 5424174141011825273}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player 1
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.764151, g: 0.12615699, b: 0.5903919, a: 1}
+  m_Color: {r: 0.4339623, g: 0.022107478, b: 0.36066765, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -138,7 +138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9db0528b327b78d429877d6a3296d414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 5
+  HP: 10
+  Cost: 500
 --- !u!114 &5424174141011825273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,8 +155,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 2299624687026295009}
   bulletPrefab: {fileID: 7485509747269389125, guid: 2368e05c83ff94e579a141c41c3e773a, type: 3}
-  bulletForce: 20
-  shootingInterval: 0.6
+  bulletForce: 10
+  shootingInterval: 0.1
   startShotting: 0
 --- !u!1 &4641202538481310363
 GameObject:
