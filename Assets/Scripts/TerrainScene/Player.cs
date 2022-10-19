@@ -78,6 +78,11 @@ public class Player : MonoBehaviour
             Destroy(collision.gameObject);
             if (HP < 0)
             {
+                GameObject[] towers = GameObject.FindGameObjectsWithTag("Tower");
+                foreach (var tower in towers)
+                {
+                    tower.GetComponent<TowerShooting>().startShotting = false;
+                }
                 playersDestroy.Add(this.gameObject);
                 if (playersDestroy.Count >= GameObject.FindGameObjectsWithTag("Player").GetLength(0))
                 {

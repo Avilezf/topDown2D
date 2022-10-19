@@ -289,9 +289,10 @@ MonoBehaviour:
   TowerPrefab: {fileID: -4670028698256844425, guid: 416d2f6fd4fcdcb469d59de7bcd4de27, type: 3}
   Tower2Prefab: {fileID: -4670028698256844425, guid: 3ff49f71c2086be4f8e2762ee08275a1, type: 3}
   player: {fileID: 0}
+  tower: {fileID: 0}
   closestDistance: 1
-  budgetPlayer: 1000
-  budgetTowers: 500
+  budgetPlayer: 2000
+  budgetTowers: 1000
 --- !u!4 &681147168
 Transform:
   m_ObjectHideFlags: 0

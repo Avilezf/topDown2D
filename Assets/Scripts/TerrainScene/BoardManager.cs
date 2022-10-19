@@ -15,6 +15,8 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private Tower Tower2Prefab;
     private Grid grid;
     public Player player;
+
+    public Tower tower;
     [SerializeField]
     private float closestDistance;
 
@@ -43,11 +45,13 @@ public class BoardManager : MonoBehaviour
             selected = Random.Range(1,3);
             if(selected == 1 && budget >= TowerPrefab.Cost)
             {
-                Instantiate(TowerPrefab, new Vector2(Random.Range(1,7), Random.Range(10,17)), Quaternion.identity);    
+                tower = Instantiate(TowerPrefab, new Vector2(Random.Range(1,7), Random.Range(10,17)), Quaternion.identity);    
+                budget = budget - TowerPrefab.Cost;
             }
             if(selected == 2 && budget >= Tower2Prefab.Cost)
             {
-                Instantiate(Tower2Prefab, new Vector2(Random.Range(1,7), Random.Range(10,17)), Quaternion.identity);    
+                tower = Instantiate(Tower2Prefab, new Vector2(Random.Range(1,7), Random.Range(10,17)), Quaternion.identity);    
+                budget = budget - Tower2Prefab.Cost;
             }
         }
         PathManager.Instance.powerUnitLocation = new Vector2Int((int)findClosestEnemy().transform.position.x, (int)findClosestEnemy().transform.position.y);
@@ -87,15 +91,8 @@ public class BoardManager : MonoBehaviour
     private GameObject findClosestEnemy()
     {
         GameObject[] objs;
-        
-        if (gameObject.tag == "Tower") 
-        {
-            objs = GameObject.FindGameObjectsWithTag("Player");
-        }
-        else
-        {
-            objs = GameObject.FindGameObjectsWithTag("Tower");
-        }
+        objs = GameObject.FindGameObjectsWithTag("Tower");
+
             
 
         GameObject closestEnemy = null;

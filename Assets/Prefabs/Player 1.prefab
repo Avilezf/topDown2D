@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  HP: 10
+  HP: 40
   Cost: 500
 --- !u!114 &5424174141011825273
 MonoBehaviour:

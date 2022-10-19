@@ -31,7 +31,12 @@ public class Tower : MonoBehaviour
                 
                 this.towersDestroy.Add(this.gameObject);
                 PathManager.Instance.powerUnitLocation = new Vector2Int((int)findClosestEnemy().transform.position.x, (int)findClosestEnemy().transform.position.y);
-                BoardManager.Instance.player.starMoving(2); //Problem
+                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                foreach (var player in players)
+                {
+                    player.GetComponent<Player>().starMoving(2);
+                    player.GetComponent<PlayerShooting>().startShotting = false;
+                }
                 count++;
                 Destroy(this.gameObject);
             }
