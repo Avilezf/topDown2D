@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GameStateEnum.end:
                 SceneManager.LoadScene("TerrainScene");
+                GenerateFile.Instance.GenerateTxt();
                 break;
         }
 

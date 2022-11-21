@@ -85,8 +85,10 @@ public class Player : MonoBehaviour
                 }
                 playersDestroy.Add(this.gameObject);
                 if (playersDestroy.Count >= GameObject.FindGameObjectsWithTag("Player").GetLength(0))
-                {
+                {                 
                     GameManager.Instance.UpdateGameState(GameManager.GameStateEnum.end);
+                    GenerateFile.Instance.generateWinGame(0);
+                    
                 }
                 else
                 {

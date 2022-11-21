@@ -23,6 +23,8 @@ public class PowerSource : MonoBehaviour
             {
                 Destroy(this.gameObject);
                 GameManager.Instance.UpdateGameState(GameManager.GameStateEnum.end);
+                GenerateFile.Instance.generateWinGame(1);
+                
             }
         }
     }

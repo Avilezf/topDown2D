@@ -167,7 +167,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5368254ee04454fc79423ad8cbc5464f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUnitLocation: {x: 0, y: 0}
+  powerUnitLocation: {x: 1, y: 1}
+--- !u!1 &102064597
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 102064599}
+  - component: {fileID: 102064598}
+  m_Layer: 0
+  m_Name: FileManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &102064598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102064597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97b9dacce39cd2043b351c9f53217d0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &102064599
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102064597}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &508404469
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,11 +332,13 @@ MonoBehaviour:
   PowerSourcePrefab: {fileID: 2219081163613578378, guid: 152930bb97dca45e9be6ef08cdaea323, type: 3}
   TowerPrefab: {fileID: -4670028698256844425, guid: 416d2f6fd4fcdcb469d59de7bcd4de27, type: 3}
   Tower2Prefab: {fileID: -4670028698256844425, guid: 3ff49f71c2086be4f8e2762ee08275a1, type: 3}
-  player: {fileID: 0}
-  tower: {fileID: 0}
+  player: {fileID: 4587635388746303466, guid: e8d4002ea143343439f26e985cee9581, type: 3}
+  tower: {fileID: -4670028698256844425, guid: 416d2f6fd4fcdcb469d59de7bcd4de27, type: 3}
   closestDistance: 1
-  budgetPlayer: 2000
-  budgetTowers: 1000
+  budgetPlayer: 1000
+  budgetTowers: 200
+  towerConfiguration: 13
+  playerConfiguration: 212111
 --- !u!4 &681147168
 Transform:
   m_ObjectHideFlags: 0

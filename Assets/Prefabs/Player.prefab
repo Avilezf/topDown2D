@@ -139,6 +139,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
+  HP: 500
+  Cost: 100
 --- !u!114 &5424174141011825273
 MonoBehaviour:
   m_ObjectHideFlags: 0
