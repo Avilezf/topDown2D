@@ -338,7 +338,7 @@ MonoBehaviour:
   budgetPlayer: 1000
   budgetTowers: 200
   towerConfiguration: 13
-  playerConfiguration: 212111
+  playerConfiguration: 211121
 --- !u!4 &681147168
 Transform:
   m_ObjectHideFlags: 0

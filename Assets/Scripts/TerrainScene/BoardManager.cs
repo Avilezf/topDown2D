@@ -35,118 +35,17 @@ public class BoardManager : MonoBehaviour
 
     public void SetupBoard()
     {
-        if (this.towerConfiguration.Equals("0") || this.playerConfiguration.Equals("0"))
+        if (this.towerConfiguration.Equals("0") && this.playerConfiguration.Equals("0"))
         {
             SetupNormal();
         }
         else
         {
-            SetupPosition();
+            SetupPositionNew();
+
         }
 
     }
-    private void SetupPosition()
-    {
-        grid = new Grid(11, 20, 1, CellPrefab);
-        Instantiate(PowerSourcePrefab, new Vector2(5, 19), Quaternion.identity);
-        //Needs 3 random to generate:
-        // 1. X
-        // 2. Y
-        // 3. Much
-        //--------------------------------------------------------------
-        int selected;
-        int budget = budgetTowers;
-        //save position de las towers
-        List<Vector2> towers1Array = new List<Vector2>();
-        List<Vector2> towers2Array = new List<Vector2>();
-        int auxIntTower = 0;
-
-        int towerLength = this.towerConfiguration.Length;
-        for (int i = 0; i < (towerLength / 2); i++)
-        {
-            string towerSubstr = towerConfiguration.Substring(auxIntTower, 2);
-
-            if (towerSubstr.Substring(auxIntTower, 1).Equals("1"))
-            {
-                Vector2 towerPosition = new Vector2(Random.Range(1, int.Parse(towerSubstr.Substring(auxIntTower + 1, 1))), Random.Range(10, 17));
-                tower = Instantiate(TowerPrefab, towerPosition, Quaternion.identity);
-                towers1Array.Add(towerPosition);
-            }
-            else
-            {
-                if (towerSubstr.Substring(auxIntTower, 1).Equals("2"))
-                {
-                    Vector2 towerPosition = new Vector2(Random.Range(1, int.Parse(towerSubstr.Substring(auxIntTower + 1, 1))), Random.Range(10, 17));
-                    tower = Instantiate(Tower2Prefab, towerPosition, Quaternion.identity);
-                    towers2Array.Add(towerPosition);
-                }
-            }
-            auxIntTower = auxIntTower + 2;
-        }
-
-        try
-        {
-            PathManager.Instance.powerUnitLocation = new Vector2Int((int)findClosestEnemy().transform.position.x, (int)findClosestEnemy().transform.position.y);
-        }
-        catch (System.Exception)
-        {
-            Debug.Log("Se desoriento!");
-        }
-
-
-        //Needs 4 random to generate:
-        // 1. X
-        // 2. Y
-        // 3. Much
-        // 4. Speed
-        //--------------------------------------------------------------
-        budget = budgetPlayer;
-        List<Vector2> players1Array = new List<Vector2>();
-        List<Vector2> players2Array = new List<Vector2>();
-        List<Vector2> players3Array = new List<Vector2>();
-        Vector2 playerPosition;
-        int auxIntPlayer = 0;
-
-        int playerLength = this.playerConfiguration.Length;
-        Debug.Log(playerLength / 2);
-
-        for (int i = 0; i < (playerLength / 2); i++)
-        {
-            string playerSubstr = playerConfiguration.Substring(auxIntPlayer, 2);
-
-            if (playerSubstr.Substring(auxIntPlayer, 1).Equals("1"))
-            {
-                playerPosition = new Vector2(Random.Range(0, int.Parse(playerSubstr.Substring(auxIntPlayer + 1, 1))), Random.Range(0, 5));
-                player = Instantiate(PlayerPrefab, playerPosition, Quaternion.identity);
-                players1Array.Add(playerPosition);
-                player.starMoving(grid, Random.Range(2, 6));
-            }
-            else
-            {
-                if (playerSubstr.Substring(auxIntPlayer, 1).Equals("2"))
-                {
-                    playerPosition = new Vector2(Random.Range(0, int.Parse(playerSubstr.Substring(auxIntPlayer + 1, 1))), Random.Range(0, 5));
-                    player = Instantiate(Player2Prefab, playerPosition, Quaternion.identity);
-                    players2Array.Add(playerPosition);
-                    player.starMoving(grid, Random.Range(2, 6));
-                }
-                else
-                {
-                    if (playerSubstr.Substring(auxIntPlayer, 1).Equals("3"))
-                    {
-                        playerPosition = new Vector2(Random.Range(0, int.Parse(playerSubstr.Substring(auxIntPlayer + 1, 1))), Random.Range(0, 5));
-                        player = Instantiate(Player3Prefab, playerPosition, Quaternion.identity);
-                        players3Array.Add(playerPosition);
-                        player.starMoving(grid, Random.Range(2, 6));
-                    }
-                }
-            }
-            auxIntPlayer = auxIntPlayer + 2;
-        }
-
-        createTxtPositions(towers1Array, towers2Array, players1Array, players2Array, players3Array);
-    }
-
     private void SetupNormal()
     {
         grid = new Grid(11, 20, 1, CellPrefab);
@@ -232,6 +131,111 @@ public class BoardManager : MonoBehaviour
         }
         createTxtPositions(towers1Array, towers2Array, players1Array, players2Array, players3Array);
     }
+
+    private void SetupPositionNew()
+    {
+        grid = new Grid(11, 20, 1, CellPrefab);
+        Instantiate(PowerSourcePrefab, new Vector2(5, 19), Quaternion.identity);
+        //Needs 3 random to generate:
+        // 1. X
+        // 2. Y
+        // 3. Much
+        //--------------------------------------------------------------
+        //save position de las towers
+        List<Vector2> towers1Array = new List<Vector2>();
+        List<Vector2> towers2Array = new List<Vector2>();
+        int auxIntTower = 0;
+
+        int towerLength = this.towerConfiguration.Length;
+        int Length_ = towerLength / 2;
+        int i = 0;
+        while ( i < Length_)
+        {
+            string towerSubstr = towerConfiguration.Substring(auxIntTower, 2);
+            if (towerSubstr.Substring(0, 1).Equals("1"))
+            {
+                Vector2 towerPosition = new Vector2(Random.Range(1, 5), Random.Range(10, 17));
+                tower = Instantiate(TowerPrefab, towerPosition, Quaternion.identity);
+                towers1Array.Add(towerPosition);
+            }
+            else
+            {
+                if (towerSubstr.Substring(0, 1).Equals("2"))
+                {
+                    Vector2 towerPosition = new Vector2(Random.Range(1,5), Random.Range(10, 17));
+                    tower = Instantiate(Tower2Prefab, towerPosition, Quaternion.identity);
+                    towers2Array.Add(towerPosition);
+                }
+            }
+            auxIntTower = auxIntTower + 2;
+            i++;
+        }
+
+        try
+        {
+            PathManager.Instance.powerUnitLocation = new Vector2Int((int)findClosestEnemy().transform.position.x, (int)findClosestEnemy().transform.position.y);
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Se desoriento!");
+        }
+
+
+        //Needs 4 random to generate:
+        // 1. X
+        // 2. Y
+        // 3. Much
+        // 4. Speed
+        //--------------------------------------------------------------
+        List<Vector2> players1Array = new List<Vector2>();
+        List<Vector2> players2Array = new List<Vector2>();
+        List<Vector2> players3Array = new List<Vector2>();
+        Vector2 playerPosition;
+        int auxIntPlayer = 0;
+
+        int playerLength = this.playerConfiguration.Length;
+        i = 0;
+        while (i < playerLength/2)
+        {
+            i++;
+           
+            string playerSubstr = playerConfiguration.Substring(auxIntPlayer, 2);
+            auxIntPlayer = auxIntPlayer+2;
+
+            if (playerSubstr.Substring(0, 1).Equals("1"))
+            {
+                playerPosition = new Vector2(Random.Range(0, 5), Random.Range(0, 5));
+                player = Instantiate(PlayerPrefab, playerPosition, Quaternion.identity);
+                players1Array.Add(playerPosition);
+                player.starMoving(grid, Random.Range(2, 6));
+            }
+            else
+            {
+                if (playerSubstr.Substring(0, 1).Equals("2"))
+                {
+                    playerPosition = new Vector2(Random.Range(0, 5), Random.Range(0, 5));
+                    player = Instantiate(Player2Prefab, playerPosition, Quaternion.identity);
+                    players2Array.Add(playerPosition);
+                    player.starMoving(grid, Random.Range(2, 6));
+                }
+                else
+                {
+                    if (playerSubstr.Substring(0, 1).Equals("3"))
+                    {
+                        playerPosition = new Vector2(Random.Range(0, 5), Random.Range(0, 5));
+                        player = Instantiate(Player3Prefab, playerPosition, Quaternion.identity);
+                        players3Array.Add(playerPosition);
+                        player.starMoving(grid, Random.Range(2, 6));
+                    }
+                }
+            }
+                       
+            
+        }
+
+        createTxtPositions(towers1Array, towers2Array, players1Array, players2Array, players3Array);
+    }
+
 
     private GameObject findClosestEnemy()
     {
