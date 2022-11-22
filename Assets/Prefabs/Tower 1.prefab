@@ -156,7 +156,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1.5
 --- !u!114 &-4670028698256844425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fbbbf2e5b80294a9c3845537a184a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 500
+  HP: 1000
   Cost: 500
 --- !u!114 &2822225778393415255
 MonoBehaviour:
@@ -185,6 +185,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 8945431758308002328}
   bulletPrefab: {fileID: 7485509747269389125, guid: 8e62e57e31d85824189d2786731be4fc, type: 3}
-  bulletForce: 20
+  bulletForce: 80
   shootingInterval: 0.1
   startShotting: 0

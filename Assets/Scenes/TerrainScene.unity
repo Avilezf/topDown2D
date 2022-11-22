@@ -337,8 +337,8 @@ MonoBehaviour:
   closestDistance: 1
   budgetPlayer: 1000
   budgetTowers: 200
-  towerConfiguration: 13
-  playerConfiguration: 211121
+  towerConfiguration: 2123
+  playerConfiguration: 1113
 --- !u!4 &681147168
 Transform:
   m_ObjectHideFlags: 0
@@ -430,6 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f792503896a459949a144d222969f45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameCount: 0
 --- !u!4 &1360834472
 Transform:
   m_ObjectHideFlags: 0

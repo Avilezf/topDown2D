@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 {
     List<Cell> path;
     [SerializeField]
-    private float moveSpeed = 2f;
+    public float moveSpeed = 2f;
     public Vector2 GetPosition => transform.position;
     private bool startMoving = false;
     private Grid grid;
@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "PowerSource")
         {
-            Debug.Log("Made it");
+            //Debug.Log("Made it");
             path = null;
         }
 

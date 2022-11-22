@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     private GameStateEnum gameState;
 
+    public int gameCount = 0;
+
     private void Awake()
     {
         Instance = this;

@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  HP: 100
+  HP: 300
   Cost: 500
 --- !u!114 &5424174141011825273
 MonoBehaviour:
@@ -155,8 +155,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 2299624687026295009}
   bulletPrefab: {fileID: 7485509747269389125, guid: 2368e05c83ff94e579a141c41c3e773a, type: 3}
-  bulletForce: 10
-  shootingInterval: 0.1
+  bulletForce: 40
+  shootingInterval: 0.4
   startShotting: 0
 --- !u!1 &4641202538481310363
 GameObject:

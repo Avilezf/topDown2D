@@ -13,7 +13,6 @@ public class Grid : ScriptableObject
     private Cell cellPrefab;
     private Cell[,] gridArray;
 
-
     public Grid(int width, int height, int cellSize, Cell cellPrefab)
     {
         
