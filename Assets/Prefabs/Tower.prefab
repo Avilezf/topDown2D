@@ -110,7 +110,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: e31481662ed06fd498ac818bc329da62, type: 3}
-  m_Color: {r: 0.9056604, g: 0.21803983, b: 0.19992878, a: 1}
+  m_Color: {r: 0.4339623, g: 0.021607123, b: 0.009825548, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fbbbf2e5b80294a9c3845537a184a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 60
+  HP: 500
   Cost: 100
 --- !u!114 &2822225778393415255
 MonoBehaviour:
@@ -185,6 +185,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 8945431758308002328}
   bulletPrefab: {fileID: 7485509747269389125, guid: 8e62e57e31d85824189d2786731be4fc, type: 3}
-  bulletForce: 30
+  bulletForce: 50
   shootingInterval: 0.2
   startShotting: 0

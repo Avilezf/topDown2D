@@ -7,8 +7,12 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     private GameStateEnum gameState;
+    public string towerConfiguration;
 
+    public string playerConfiguration;
+    public int countPlayer = 0;
     public int gameCount = 0;
+    public string setOfWinPlayers = "";
 
     private void Awake()
     {

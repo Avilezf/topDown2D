@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.18867922, g: 0.013171938, b: 0.15692073, a: 1}
+  m_Color: {r: 0.0673371, g: 0.12556607, b: 0.3679245, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -125,7 +125,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 3
+  m_Radius: 10
 --- !u!114 &4587635388746303466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9db0528b327b78d429877d6a3296d414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 6
+  moveSpeed: 2
   HP: 1000
   Cost: 800
 --- !u!114 &5424174141011825273
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 2299624687026295009}
   bulletPrefab: {fileID: 7485509747269389125, guid: 2368e05c83ff94e579a141c41c3e773a, type: 3}
-  bulletForce: 60
+  bulletForce: 20
   shootingInterval: 1
   startShotting: 0
 --- !u!1 &4641202538481310363

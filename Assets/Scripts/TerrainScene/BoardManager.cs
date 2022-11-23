@@ -5,6 +5,7 @@ using DG.Tweening;
 using Newtonsoft.Json;
 using System.Text;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 public class BoardManager : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private PowerSource PowerSourcePrefab;
     [SerializeField] private Tower TowerPrefab;
     [SerializeField] private Tower Tower2Prefab;
+    [SerializeField] private Tower Tower3Prefab;
     private Grid grid;
     public Player player;
 
@@ -27,10 +29,13 @@ public class BoardManager : MonoBehaviour
 
     public int budgetTowers;
 
-    public string towerConfiguration;
+    private string towerConfiguration = GameManager.Instance.towerConfiguration;
 
-    public string playerConfiguration;
+    private string playerConfiguration = GameManager.Instance.playerConfiguration;
     private int count = GameManager.Instance.gameCount;
+    private int countPlayer = GameManager.Instance.countPlayer;
+    private int[] playerConfSet = { 1113, 2123, 3133, 1123, 2113, 1133, 3113, 2133, 3123 };
+    private string setOfWinPlayers = GameManager.Instance.setOfWinPlayers;
 
     private void Awake()
     {
@@ -39,19 +44,19 @@ public class BoardManager : MonoBehaviour
 
     public void SetupBoard()
     {
-        if (this.towerConfiguration.Equals("0") && this.playerConfiguration.Equals("0"))
+        if (GameManager.Instance.towerConfiguration.Equals("0") && GameManager.Instance.playerConfiguration.Equals("0"))
         {
             SetupNormal();
         }
         else
         {
-            if (this.towerConfiguration.Equals("1") && this.playerConfiguration.Equals("1"))
+            if (GameManager.Instance.towerConfiguration.Equals("1") && GameManager.Instance.playerConfiguration.Equals("1"))
             {
                 setUpAjust();
             }
             else
             {
-                SetupPositionNew();
+                SetupPositionNewAsync();
             }
 
         }
@@ -71,6 +76,7 @@ public class BoardManager : MonoBehaviour
         //save position de las towers
         List<Vector2> towers1Array = new List<Vector2>();
         List<Vector2> towers2Array = new List<Vector2>();
+        List<Vector2> towers3Array = new List<Vector2>();
         for (int i = 0; i < Random.Range(1, 5); i++)
         {
             selected = Random.Range(1, 3);
@@ -87,6 +93,13 @@ public class BoardManager : MonoBehaviour
                 tower = Instantiate(Tower2Prefab, towerPosition, Quaternion.identity);
                 towers2Array.Add(towerPosition);
                 budget = budget - Tower2Prefab.Cost;
+            }
+            if (selected == 3 && budget >= Tower3Prefab.Cost)
+            {
+                Vector2 towerPosition = new Vector2(Random.Range(1, 7), Random.Range(10, 17));
+                tower = Instantiate(Tower3Prefab, towerPosition, Quaternion.identity);
+                towers3Array.Add(towerPosition);
+                budget = budget - Tower3Prefab.Cost;
             }
 
         }
@@ -120,27 +133,27 @@ public class BoardManager : MonoBehaviour
                 playerPosition = new Vector2(Random.Range(0, 5), Random.Range(0, 5));
                 player = Instantiate(PlayerPrefab, playerPosition, Quaternion.identity);
                 players1Array.Add(playerPosition);
-                player.starMoving(grid, Random.Range(2, 6));
-                budget = budget - 100;
+                player.starMoving(grid, PlayerPrefab.moveSpeed);
+                budget = budget - PlayerPrefab.Cost;
             }
             if (selected == 2 && budget >= Player2Prefab.Cost)
             {
                 playerPosition = new Vector2(Random.Range(0, 5), Random.Range(0, 5));
                 player = Instantiate(Player2Prefab, playerPosition, Quaternion.identity);
                 players2Array.Add(playerPosition);
-                player.starMoving(grid, Random.Range(2, 6));
-                budget = budget - 500;
+                player.starMoving(grid, Player2Prefab.moveSpeed);
+                budget = budget - Player2Prefab.Cost;
             }
             if (selected == 3 && budget >= Player3Prefab.Cost)
             {
                 playerPosition = new Vector2(Random.Range(0, 5), Random.Range(0, 5));
                 player = Instantiate(Player3Prefab, playerPosition, Quaternion.identity);
                 players3Array.Add(playerPosition);
-                player.starMoving(grid, Random.Range(2, 6));
-                budget = budget - 800;
+                player.starMoving(grid, Player3Prefab.moveSpeed);
+                budget = budget - Player3Prefab.Cost;
             }
         }
-        createTxtPositions(towers1Array, towers2Array, players1Array, players2Array, players3Array);
+        createTxtPositions(towers1Array, towers2Array, towers3Array, players1Array, players2Array, players3Array);
     }
 
     private void setUpAjust()
@@ -174,6 +187,24 @@ public class BoardManager : MonoBehaviour
 
             case 6:
                 this.simulation_6();
+                break;
+
+            case 7:
+                this.simulation_7();
+                break;
+
+            case 8:
+                this.simulation_8();
+                break;
+
+            case 9:
+                this.simulation_9();
+                count = 0;
+                GameManager.Instance.gameCount = 0;
+                break;
+
+            default:
+                this.simulation_9();
                 count = 0;
                 GameManager.Instance.gameCount = 0;
                 break;
@@ -193,16 +224,36 @@ public class BoardManager : MonoBehaviour
         var response = await client.PostAsync(url, data);
 
         var result = await response.Content.ReadAsStringAsync();
-        float x = System.Convert.ToSingle(result.ToString().Substring(1,result.Length -2));
+        float x = System.Convert.ToSingle(result.ToString().Substring(1, result.Length - 2));
         int y = (int)(x * 100);
-        Debug.Log("Prediction of players winning: "+y+"%");
+        Debug.Log("Prediction of players winning: " + y + "%");
 
     }
 
-    private void SetupPositionNew()
+    private async Task<int> PredictionBoard2Async()
+    {
+        var url = "http://localhost:8080/";
+        var config = new PlayConfiguration(System.Int32.Parse(towerConfiguration), System.Int32.Parse(playerConfiguration));
+
+        var json = JsonConvert.SerializeObject(config);
+        var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+        using var client = new HttpClient();
+
+        var response = await client.PostAsync(url, data);
+
+        var result = await response.Content.ReadAsStringAsync();
+        float x = System.Convert.ToSingle(result.ToString().Substring(1, result.Length - 2));
+        int y = (int)(x * 100);
+        Debug.Log("Prediction of players winning: " + y + "%");
+        return y;
+
+    }
+
+    private async Task SetupPositionNewAsync()
     {
 
-        PredictionBoard();
+        int y = await PredictionBoard2Async();
 
         grid = new Grid(11, 20, 1, CellPrefab);
         Instantiate(PowerSourcePrefab, new Vector2(5, 19), Quaternion.identity);
@@ -214,6 +265,7 @@ public class BoardManager : MonoBehaviour
         //save position de las towers
         List<Vector2> towers1Array = new List<Vector2>();
         List<Vector2> towers2Array = new List<Vector2>();
+        List<Vector2> towers3Array = new List<Vector2>();
         int auxIntTower = 0;
 
         int towerLength = this.towerConfiguration.Length;
@@ -238,6 +290,14 @@ public class BoardManager : MonoBehaviour
                 {
                     tower = Instantiate(Tower2Prefab, towerPosition[i], Quaternion.identity);
                     towers2Array.Add(towerPosition[i]);
+                }
+                else
+                {
+                    if (towerSubstr.Substring(0, 1).Equals("3"))
+                    {
+                        tower = Instantiate(Tower3Prefab, towerPosition[i], Quaternion.identity);
+                        towers3Array.Add(towerPosition[i]);
+                    }
                 }
             }
             auxIntTower = auxIntTower + 2;
@@ -307,7 +367,34 @@ public class BoardManager : MonoBehaviour
 
         }
 
-        createTxtPositions(towers1Array, towers2Array, players1Array, players2Array, players3Array);
+        createTxtPositions(towers1Array, towers2Array, towers3Array, players1Array, players2Array, players3Array);
+
+        if (y < 80 && playerConfSet.Length > countPlayer)
+        {
+            countPlayer++;
+            GameManager.Instance.countPlayer = countPlayer;
+            Debug.Log(playerConfSet[countPlayer]);
+            GameManager.Instance.playerConfiguration = playerConfSet[countPlayer].ToString();
+        }
+        else
+        {
+            if (countPlayer < 8)
+            {
+                countPlayer++;
+                GameManager.Instance.countPlayer = countPlayer;
+                GameManager.Instance.playerConfiguration = playerConfSet[countPlayer].ToString();
+                setOfWinPlayers = setOfWinPlayers + " " + playerConfSet[countPlayer].ToString();
+                GameManager.Instance.setOfWinPlayers = setOfWinPlayers;
+                Debug.Log(GameManager.Instance.setOfWinPlayers);
+            }
+            else
+            {
+                Debug.Log("Winners configurations: "+setOfWinPlayers);
+                GameManager.Instance.setOfWinPlayers = "";
+            }
+
+        }
+        
     }
 
 
@@ -474,7 +561,7 @@ public class BoardManager : MonoBehaviour
         GenerateFile.Instance.generateFile(board);
     }
 
-    private void createTxtPositions(List<Vector2> towers1Array, List<Vector2> towers2Array, List<Vector2> players1Array, List<Vector2> players2Array, List<Vector2> players3Array)
+    private void createTxtPositions(List<Vector2> towers1Array, List<Vector2> towers2Array, List<Vector2> towers3Array, List<Vector2> players1Array, List<Vector2> players2Array, List<Vector2> players3Array)
     {
         string towers = "";
         string players = "";
@@ -488,6 +575,12 @@ public class BoardManager : MonoBehaviour
         for (int i = 0; i < towers2Array.Count; i++)
         {
             towers = towers + "2" + setPosition(towers2Array[i]);
+        }
+
+        //Tower 2
+        for (int i = 0; i < towers3Array.Count; i++)
+        {
+            towers = towers + "3" + setPosition(towers3Array[i]);
         }
 
 
@@ -545,12 +638,13 @@ public class BoardManager : MonoBehaviour
 
     private void simulation_1()
     {
-        //PLAYER 1 VS TOWER1
+        //PLAYER 1 VS TOWER 1
         grid = new Grid(11, 20, 1, CellPrefab);
         Instantiate(PowerSourcePrefab, new Vector2(5, 19), Quaternion.identity);
 
         List<Vector2> towers1Array = new List<Vector2>();
         List<Vector2> towers2Array = new List<Vector2>();
+        List<Vector2> towers3Array = new List<Vector2>();
         Vector2 towerPosition;
 
         //TOWER 1
@@ -588,7 +682,7 @@ public class BoardManager : MonoBehaviour
         players1Array.Add(playerPosition);
         player.starMoving(grid, PlayerPrefab.moveSpeed);
 
-        createTxtPositions(towers1Array, towers2Array, players1Array, players2Array, players3Array);
+        createTxtPositions(towers1Array, towers2Array, towers3Array, players1Array, players2Array, players3Array);
     }
 
     private void simulation_2()
@@ -600,6 +694,7 @@ public class BoardManager : MonoBehaviour
 
         List<Vector2> towers1Array = new List<Vector2>();
         List<Vector2> towers2Array = new List<Vector2>();
+        List<Vector2> towers3Array = new List<Vector2>();
         Vector2 towerPosition;
 
         //TOWER 2 -------------------------------
@@ -637,10 +732,60 @@ public class BoardManager : MonoBehaviour
         players1Array.Add(playerPosition);
         player.starMoving(grid, PlayerPrefab.moveSpeed);
 
-        createTxtPositions(towers1Array, towers2Array, players1Array, players2Array, players3Array);
+        createTxtPositions(towers1Array, towers2Array, towers3Array, players1Array, players2Array, players3Array);
     }
 
     private void simulation_3()
+    {
+        //PLAYER 1 VS TOWER 3
+        grid = new Grid(11, 20, 1, CellPrefab);
+        Instantiate(PowerSourcePrefab, new Vector2(5, 19), Quaternion.identity);
+
+
+        List<Vector2> towers1Array = new List<Vector2>();
+        List<Vector2> towers2Array = new List<Vector2>();
+        List<Vector2> towers3Array = new List<Vector2>();
+        Vector2 towerPosition;
+
+        //TOWER 3 -------------------------------
+        towerPosition = new Vector2(1, 15);
+        tower = Instantiate(Tower3Prefab, towerPosition, Quaternion.identity);
+        towers3Array.Add(towerPosition);
+
+        towerPosition = new Vector2(7, 17);
+        tower = Instantiate(Tower3Prefab, towerPosition, Quaternion.identity);
+        towers3Array.Add(towerPosition);
+
+
+        try
+        {
+            PathManager.Instance.powerUnitLocation = new Vector2Int((int)findClosestEnemy().transform.position.x, (int)findClosestEnemy().transform.position.y);
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Se desoriento!");
+        }
+
+        List<Vector2> players1Array = new List<Vector2>();
+        List<Vector2> players2Array = new List<Vector2>();
+        List<Vector2> players3Array = new List<Vector2>();
+        Vector2 playerPosition;
+
+        //PLAYER 1
+        playerPosition = new Vector2(1, 1);
+        player = Instantiate(PlayerPrefab, playerPosition, Quaternion.identity);
+        players1Array.Add(playerPosition);
+        player.starMoving(grid, PlayerPrefab.moveSpeed);
+
+        playerPosition = new Vector2(5, 1);
+        player = Instantiate(PlayerPrefab, playerPosition, Quaternion.identity);
+        players1Array.Add(playerPosition);
+        player.starMoving(grid, PlayerPrefab.moveSpeed);
+
+        createTxtPositions(towers1Array, towers2Array, towers3Array, players1Array, players2Array, players3Array);
+    }
+
+    private void simulation_4()
     {
         //PLAYER 2 VS TOWER 1
         grid = new Grid(11, 20, 1, CellPrefab);
@@ -648,6 +793,7 @@ public class BoardManager : MonoBehaviour
 
         List<Vector2> towers1Array = new List<Vector2>();
         List<Vector2> towers2Array = new List<Vector2>();
+        List<Vector2> towers3Array = new List<Vector2>();
         Vector2 towerPosition;
 
         //TOWER 1
@@ -685,10 +831,10 @@ public class BoardManager : MonoBehaviour
         players2Array.Add(playerPosition);
         player.starMoving(grid, Player2Prefab.moveSpeed);
 
-        createTxtPositions(towers1Array, towers2Array, players1Array, players2Array, players3Array);
+        createTxtPositions(towers1Array, towers2Array, towers3Array, players1Array, players2Array, players3Array);
     }
 
-    private void simulation_4()
+    private void simulation_5()
     {
         //PLAYER 2 VS TOWER 2
         grid = new Grid(11, 20, 1, CellPrefab);
@@ -696,6 +842,7 @@ public class BoardManager : MonoBehaviour
 
         List<Vector2> towers1Array = new List<Vector2>();
         List<Vector2> towers2Array = new List<Vector2>();
+        List<Vector2> towers3Array = new List<Vector2>();
         Vector2 towerPosition;
 
         //TOWER 2
@@ -733,10 +880,59 @@ public class BoardManager : MonoBehaviour
         players2Array.Add(playerPosition);
         player.starMoving(grid, Player2Prefab.moveSpeed);
 
-        createTxtPositions(towers1Array, towers2Array, players1Array, players2Array, players3Array);
+        createTxtPositions(towers1Array, towers2Array, towers3Array, players1Array, players2Array, players3Array);
     }
 
-    private void simulation_5()
+    private void simulation_6()
+    {
+        //PLAYER 2 VS TOWER 3
+        grid = new Grid(11, 20, 1, CellPrefab);
+        Instantiate(PowerSourcePrefab, new Vector2(5, 19), Quaternion.identity);
+
+        List<Vector2> towers1Array = new List<Vector2>();
+        List<Vector2> towers2Array = new List<Vector2>();
+        List<Vector2> towers3Array = new List<Vector2>();
+        Vector2 towerPosition;
+
+        //TOWER 3
+        towerPosition = new Vector2(1, 15);
+        tower = Instantiate(Tower3Prefab, towerPosition, Quaternion.identity);
+        towers3Array.Add(towerPosition);
+
+        towerPosition = new Vector2(7, 17);
+        tower = Instantiate(Tower3Prefab, towerPosition, Quaternion.identity);
+        towers3Array.Add(towerPosition);
+
+
+        try
+        {
+            PathManager.Instance.powerUnitLocation = new Vector2Int((int)findClosestEnemy().transform.position.x, (int)findClosestEnemy().transform.position.y);
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Se desoriento!");
+        }
+
+        List<Vector2> players1Array = new List<Vector2>();
+        List<Vector2> players2Array = new List<Vector2>();
+        List<Vector2> players3Array = new List<Vector2>();
+        Vector2 playerPosition;
+
+        //PLAYER 2
+        playerPosition = new Vector2(1, 1);
+        player = Instantiate(Player2Prefab, playerPosition, Quaternion.identity);
+        players2Array.Add(playerPosition);
+        player.starMoving(grid, Player2Prefab.moveSpeed);
+
+        playerPosition = new Vector2(5, 1);
+        player = Instantiate(Player2Prefab, playerPosition, Quaternion.identity);
+        players2Array.Add(playerPosition);
+        player.starMoving(grid, Player2Prefab.moveSpeed);
+
+        createTxtPositions(towers1Array, towers2Array, towers3Array, players1Array, players2Array, players3Array);
+    }
+
+    private void simulation_7()
     {
         //PLAYER 3 VS TOWER 1
         grid = new Grid(11, 20, 1, CellPrefab);
@@ -744,6 +940,7 @@ public class BoardManager : MonoBehaviour
 
         List<Vector2> towers1Array = new List<Vector2>();
         List<Vector2> towers2Array = new List<Vector2>();
+        List<Vector2> towers3Array = new List<Vector2>();
         Vector2 towerPosition;
 
         //TOWER 1
@@ -765,6 +962,7 @@ public class BoardManager : MonoBehaviour
             Debug.Log("Se desoriento!");
         }
 
+
         List<Vector2> players1Array = new List<Vector2>();
         List<Vector2> players2Array = new List<Vector2>();
         List<Vector2> players3Array = new List<Vector2>();
@@ -781,10 +979,10 @@ public class BoardManager : MonoBehaviour
         players3Array.Add(playerPosition);
         player.starMoving(grid, Player3Prefab.moveSpeed);
 
-        createTxtPositions(towers1Array, towers2Array, players1Array, players2Array, players3Array);
+        createTxtPositions(towers1Array, towers2Array, towers3Array, players1Array, players2Array, players3Array);
     }
 
-    private void simulation_6()
+    private void simulation_8()
     {
         //PLAYER 3 VS TOWER 2
         grid = new Grid(11, 20, 1, CellPrefab);
@@ -792,6 +990,7 @@ public class BoardManager : MonoBehaviour
 
         List<Vector2> towers1Array = new List<Vector2>();
         List<Vector2> towers2Array = new List<Vector2>();
+        List<Vector2> towers3Array = new List<Vector2>();
         Vector2 towerPosition;
 
         //TOWER 2
@@ -830,7 +1029,57 @@ public class BoardManager : MonoBehaviour
         players3Array.Add(playerPosition);
         player.starMoving(grid, Player3Prefab.moveSpeed);
 
-        createTxtPositions(towers1Array, towers2Array, players1Array, players2Array, players3Array);
+        createTxtPositions(towers1Array, towers2Array, towers3Array, players1Array, players2Array, players3Array);
+    }
+
+    private void simulation_9()
+    {
+        //PLAYER 3 VS TOWER 3
+        grid = new Grid(11, 20, 1, CellPrefab);
+        Instantiate(PowerSourcePrefab, new Vector2(5, 19), Quaternion.identity);
+
+        List<Vector2> towers1Array = new List<Vector2>();
+        List<Vector2> towers2Array = new List<Vector2>();
+        List<Vector2> towers3Array = new List<Vector2>();
+        Vector2 towerPosition;
+
+        //TOWER 3
+        towerPosition = new Vector2(1, 15);
+        tower = Instantiate(Tower3Prefab, towerPosition, Quaternion.identity);
+        towers3Array.Add(towerPosition);
+
+        towerPosition = new Vector2(7, 17);
+        tower = Instantiate(Tower3Prefab, towerPosition, Quaternion.identity);
+        towers3Array.Add(towerPosition);
+
+
+        try
+        {
+            PathManager.Instance.powerUnitLocation = new Vector2Int((int)findClosestEnemy().transform.position.x, (int)findClosestEnemy().transform.position.y);
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("Se desoriento!");
+        }
+
+
+        List<Vector2> players1Array = new List<Vector2>();
+        List<Vector2> players2Array = new List<Vector2>();
+        List<Vector2> players3Array = new List<Vector2>();
+        Vector2 playerPosition;
+
+        //PLAYER 3
+        playerPosition = new Vector2(1, 1);
+        player = Instantiate(Player3Prefab, playerPosition, Quaternion.identity);
+        players3Array.Add(playerPosition);
+        player.starMoving(grid, Player3Prefab.moveSpeed);
+
+        playerPosition = new Vector2(5, 1);
+        player = Instantiate(Player3Prefab, playerPosition, Quaternion.identity);
+        players3Array.Add(playerPosition);
+        player.starMoving(grid, Player3Prefab.moveSpeed);
+
+        createTxtPositions(towers1Array, towers2Array, towers3Array, players1Array, players2Array, players3Array);
     }
 
     private void SetupPosition()
@@ -841,6 +1090,7 @@ public class BoardManager : MonoBehaviour
 
         List<Vector2> towers1Array = new List<Vector2>();
         List<Vector2> towers2Array = new List<Vector2>();
+        List<Vector2> towers3Array = new List<Vector2>();
         Vector2 towerPosition;
 
         //TOWER 2
@@ -879,7 +1129,7 @@ public class BoardManager : MonoBehaviour
         players3Array.Add(playerPosition);
         player.starMoving(grid, Player3Prefab.moveSpeed);
 
-        createTxtPositions(towers1Array, towers2Array, players1Array, players2Array, players3Array);
+        createTxtPositions(towers1Array, towers2Array, towers3Array, players1Array, players2Array, players3Array);
     }
 
 
